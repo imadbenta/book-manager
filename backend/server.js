@@ -8,7 +8,7 @@ const app = express();
 // Configuration CORS
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL] 
+    ? ['https://book-manager-frontend.vercel.app', 'http://localhost:3000']
     : ['http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
@@ -27,7 +27,13 @@ const connectDB = async () => {
     console.log(`MongoDB connecté: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Erreur: ${error.message}`);
-    process.exit(1);
+    if (process.env.NODE_ENV === 'production') {
+      console.error(error);
+    }
+    // Ne pas quitter le processus en production
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
   }
 };
 
@@ -42,12 +48,25 @@ app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
+// Route racine
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "API Book Manager" });
+});
+
 // Gestion des erreurs globales
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Une erreur est survenue sur le serveur" });
+  res.status(500).json({ 
+    message: "Une erreur est survenue sur le serveur",
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 });
 
-// Démarrage du serveur
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Serveur en écoute sur le port ${PORT}`));
+// En développement uniquement
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => console.log(`Serveur en écoute sur le port ${PORT}`));
+}
+
+// Export pour Vercel
+module.exports = app;
