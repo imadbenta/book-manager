@@ -1,6 +1,6 @@
 // src/components/BookList.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { getBooks } from "../services/bookService";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -14,7 +14,7 @@ const BookList = ({ onEdit, onDelete }) => {
   const fetchBooks = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/books");
+      const res = await getBooks();
       setBooks(res.data);
     } catch (err) {
       console.error("Erreur lors du chargement des livres :", err);
@@ -72,7 +72,7 @@ const BookList = ({ onEdit, onDelete }) => {
       >
         <Column field="title" header="Titre" sortable />
         <Column field="author" header="Auteur" sortable />
-        <Column field="year" header="Année" sortable />
+        <Column field="publishedYear" header="Année" sortable />
         <Column body={actionBodyTemplate} header="Actions" style={{ width: '10rem' }} />
       </DataTable>
     </Card>
