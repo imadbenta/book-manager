@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
-const BOOKS_URL = `${API_URL}/books`;
+const API_URL = process.env.REACT_APP_API_URL || "https://bookmanager-git-main-imadbentas-projects.vercel.app";
+const BOOKS_URL = `${API_URL}/api/books`;
 
 export const getBooks = () => axios.get(BOOKS_URL);
 export const getBook = (id) => axios.get(`${BOOKS_URL}/${id}`);
