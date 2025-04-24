@@ -8,7 +8,7 @@ const app = express();
 // Configuration CORS
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://book-manager-frontend.vercel.app', 'http://localhost:3000']
+    ? ['https://bookmanager-eta.vercel.app', 'http://localhost:3000']
     : ['http://localhost:3000'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
