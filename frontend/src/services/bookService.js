@@ -3,7 +3,7 @@ import axios from "axios";
 // Configuration globale d'axios
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
-const API_URL = process.env.REACT_APP_API_URL || "https://bookmanager-git-main-imadbentas-projects.vercel.app";
+const API_URL = process.env.REACT_APP_API_URL || "https://bookmanager-imadbentas-projects.vercel.app";
 const BOOKS_URL = `${API_URL}/api/books`;
 
 console.log('API URL:', API_URL);
