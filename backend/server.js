@@ -30,10 +30,6 @@ const connectDB = async () => {
     if (process.env.NODE_ENV === 'production') {
       console.error(error);
     }
-    // Ne pas quitter le processus en production
-    if (process.env.NODE_ENV !== 'production') {
-      process.exit(1);
-    }
   }
 };
 
@@ -41,16 +37,23 @@ connectDB();
 
 // Routes
 const bookRoutes = require("./routes/books");
-app.use("/api/books", bookRoutes);
-
-// Health check route for Vercel
-app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
-});
 
 // Route racine
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "API Book Manager" });
+  res.json({ message: "Bienvenue sur l'API Book Manager" });
+});
+
+// Health check route for Vercel
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+// Books API routes
+app.use("/api/books", bookRoutes);
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: "Route non trouvée" });
 });
 
 // Gestion des erreurs globales
