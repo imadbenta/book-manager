@@ -5,23 +5,44 @@ import { Button } from 'primereact/button';
 import { Card } from 'primereact/card';
 
 const BookForm = ({ onSubmit, currentBook }) => {
-  const [form, setForm] = useState({ title: "", author: "", year: null });
+  const [form, setForm] = useState({ title: "", author: "", year: "" });
+  const [yearError, setYearError] = useState("");
 
   useEffect(() => {
-    if (currentBook) setForm(currentBook);
+    if (currentBook) {
+      setForm(currentBook);
+      setYearError("");
+    }
   }, [currentBook]);
+
+  const validateYear = (year) => {
+    if (!year) return "L'année est requise";
+    const currentYear = new Date().getFullYear();
+    if (year < 0) return "L'année ne peut pas être négative";
+    if (year > currentYear) return "L'année ne peut pas être dans le futur";
+    return "";
+  };
+
+  const handleYearChange = (e) => {
+    const yearValue = e.value;
+    const error = validateYear(yearValue);
+    setYearError(error);
+    setForm({ ...form, year: yearValue });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Ajouter une vérification pour la date
-    if (form.year) {
-      onSubmit(form);  // Envoyer les données avec la date
-    } else {
-      console.error("L'année de publication est manquante");
+    const error = validateYear(form.year);
+    if (error) {
+      setYearError(error);
+      return;
     }
-    setForm({ title: "", author: "", year: null });  // Réinitialiser le formulaire
+    onSubmit(form);
+    if (!currentBook) {
+      setForm({ title: "", author: "", year: "" });
+      setYearError("");
+    }
   };
-  
 
   return (
     <Card title={currentBook ? "Modifier le livre" : "Ajouter un livre"} className="book-form">
@@ -44,6 +65,7 @@ const BookForm = ({ onSubmit, currentBook }) => {
               id="author"
               value={form.author}
               onChange={(e) => setForm({ ...form, author: e.target.value })}
+              required
               placeholder="Entrez le nom de l'auteur"
             />
           </div>
@@ -53,15 +75,17 @@ const BookForm = ({ onSubmit, currentBook }) => {
             <InputNumber
               id="year"
               value={form.year}
-              onChange={(e) => {
-                console.log('Année sélectionnée:', e.value);
-                setForm({ ...form, year: e.value });
-              }}
+              onChange={handleYearChange}
+              required
               placeholder="Entrez l'année de publication"
               useGrouping={false}
-              min={1900}
-              max={new Date().getFullYear()}
+              mode="decimal"
+              minFractionDigits={0}
+              maxFractionDigits={0}
             />
+            {yearError && (
+              <small className="p-error block">{yearError}</small>
+            )}
           </div>
 
           <Button 
@@ -69,6 +93,7 @@ const BookForm = ({ onSubmit, currentBook }) => {
             label={currentBook ? "Modifier" : "Ajouter"}
             icon="pi pi-check"
             className="p-button-lg"
+            disabled={!!yearError}
           />
         </div>
       </form>
