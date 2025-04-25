@@ -7,9 +7,7 @@ const app = express();
 
 // Configuration CORS
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://bookmanager-eta.vercel.app', 'http://localhost:3000']
-    : ['http://localhost:3000'],
+  origin: ['https://bookmanager-imadbentas-projects.vercel.app', 'http://localhost:3000', 'https://book-manager-r6lv.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -20,15 +18,18 @@ app.use(express.json());
 // Connexion à MongoDB Atlas
 const connectDB = async () => {
   try {
+    console.log('Tentative de connexion à MongoDB...');
+    
     const conn = await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    
     console.log(`MongoDB connecté: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Erreur: ${error.message}`);
+    console.error('Erreur de connexion MongoDB:', error.message);
     if (process.env.NODE_ENV === 'production') {
-      console.error(error);
+      console.error('Détails de l\'erreur:', error);
     }
   }
 };
@@ -61,7 +62,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ 
     message: "Une erreur est survenue sur le serveur",
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Erreur interne'
   });
 });
 
