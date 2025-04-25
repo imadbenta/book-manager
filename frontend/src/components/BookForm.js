@@ -49,17 +49,20 @@ const BookForm = ({ onSubmit, currentBook }) => {
           </div>
 
           <div className="field">
-  <label htmlFor="year">Année</label>
-  <InputNumber
-    id="year"
-    value={form.year}
-    onChange={(e) => setForm({ ...form, year: e.value })}  // Assurez-vous que la valeur est correcte ici
-    placeholder="Entrez l'année de publication"
-    useGrouping={false}
-    min={1900}  // Vous pouvez ajouter une valeur minimale pour l'année
-    max={new Date().getFullYear()}  // Et une valeur maximale (par exemple, l'année actuelle)
-  />
-</div>
+            <label htmlFor="year">Année de publication</label>
+            <InputNumber
+              id="year"
+              value={form.year}
+              onChange={(e) => {
+                console.log('Année sélectionnée:', e.value);
+                setForm({ ...form, year: e.value });
+              }}
+              placeholder="Entrez l'année de publication"
+              useGrouping={false}
+              min={1900}
+              max={new Date().getFullYear()}
+            />
+          </div>
 
           <Button 
             type="submit" 

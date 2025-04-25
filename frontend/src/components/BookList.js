@@ -106,7 +106,7 @@ const BookList = ({ onEdit, onDelete }) => {
       >
         <Column field="title" header="Titre" sortable />
         <Column field="author" header="Auteur" sortable />
-        <Column field="year" header="Année" sortable />
+        <Column field="year" header="Année de publication" sortable />
         <Column body={actionBodyTemplate} header="Actions" style={{ width: '10rem' }} />
       </DataTable>
     </Card>

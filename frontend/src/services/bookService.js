@@ -49,7 +49,9 @@ export const getBook = async (id) => {
 
 export const createBook = async (data) => {
   try {
+    console.log('Création d\'un livre avec les données:', data);
     const response = await axios.post(BOOKS_URL, data);
+    console.log('Réponse de création:', response.data);
     return response;
   } catch (error) {
     console.error('Error creating book:', error);
@@ -59,7 +61,9 @@ export const createBook = async (data) => {
 
 export const updateBook = async (id, data) => {
   try {
+    console.log('Mise à jour du livre', id, 'avec les données:', data);
     const response = await axios.put(`${BOOKS_URL}/${id}`, data);
+    console.log('Réponse de mise à jour:', response.data);
     return response;
   } catch (error) {
     console.error(`Error updating book ${id}:`, error);
