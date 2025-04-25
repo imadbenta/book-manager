@@ -19,6 +19,7 @@ function App() {
   };
 
   const handleSubmit = async (bookData) => {
+    console.log("Données soumises:", bookData);  // Ajouter un log pour vérifier les données
     try {
       if (currentBook) {
         await updateBook(currentBook._id, bookData);
@@ -28,12 +29,13 @@ function App() {
         showToast('success', 'Succès', 'Livre ajouté avec succès');
       }
       setCurrentBook(null);
-      setCurrentPage('list'); // Retour à la liste après l'ajout
+      setCurrentPage('list');
     } catch (error) {
       showToast('error', 'Erreur', 'Une erreur est survenue');
       console.error("Erreur lors de l'ajout/modification du livre:", error);
     }
   };
+  
 
   const handleDelete = async (bookId) => {
     try {
